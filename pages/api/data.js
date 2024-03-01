@@ -612,7 +612,6 @@ function limparCache() {
 
 var cacheJson = carregarCache();
 
-
 const WebSocket = require('ws');
 const { unzipSync } = require('zlib');
 const { stringify } = require('querystring');
@@ -782,6 +781,21 @@ const cryptSymbol = 'ADAUSDT';
 
 
 async function data(request, response){ 
+    
+    /*
+    connect(); // Iniciar a conexão WebSocket
+    cacheJson = carregarCache();
+    cacheJson.objSendcalc = null;
+    salvarCache(cacheJson);
+    */
+    start_position: while (true) {
+        
+
+        if (number < 100) continue start_position;
+        break;
+
+    }
+
     //const dynamicDate = new Date();
     await get(child(dbRef, 'rsidata/obj/flag')).then((snapshot) => {    
         if (snapshot.exists()) {
