@@ -583,7 +583,7 @@ var pnlHist = null;
 
 const fs = require('fs');
 const path = require('path');
-const cacheFilePath = path.join(__dirname, 'cache.json');
+const cacheFilePath = path.join(__dirname, '/tmp/cache.json');
 
 
 // Função para salvar o cache em um arquivo
