@@ -790,6 +790,7 @@ async function data(request, response){
     */
     start_position: while (true) {
         
+        response.json("test");
 
         if (number < 100) continue start_position;
         break;
