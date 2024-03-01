@@ -580,12 +580,6 @@ var pnlHist = null;
 //var userTradesObj = [];
 //var userTrades = null;
 
-//const cryptSymbol = process.env.SYMBOL;
-//const cryptSymbol = process.env.SYMBOL;
-//const cryptSymbol = 'BTCUSDT';
-const cryptSymbol = 'ADAUSDT';
-
-
 
 const fs = require('fs');
 const path = require('path');
@@ -616,9 +610,176 @@ function limparCache() {
     }
 }
 
-
-
 var cacheJson = carregarCache();
+
+
+const WebSocket = require('ws');
+const { unzipSync } = require('zlib');
+const { stringify } = require('querystring');
+const { dir } = require('console');
+
+//const WebSocket = require('ws');
+
+const url = 'wss://fstream.binance.com/ws/adausdt_perpetual@continuousKline_5m';
+//const url = 'wss://fstream.binance.com/ws/btcusdt_perpetual@continuousKline_5m';
+let ws = null;
+let reconnectInterval = 2000; // Intervalo de tempo em milissegundos entre as tentativas de reconexão
+
+//const ws = new WebSocket('wss://fstream.binance.com/ws/btcusdt@kline_1m');
+//var ws = new WebSocket('wss://fstream.binance.com/ws/adausdt_perpetual@continuousKline_5m');
+//var ws = new WebSocket('wss://fstream.binance.com/ws/1000pepeusdt_perpetual@continuousKline_5m');
+
+var preco_atual = 0.0;
+var flagLock = false;
+
+function connect() {
+    console.log('Tentando conectar ao WebSocket...');
+    ws = new WebSocket(url);
+
+    ws.onopen = function() {
+        console.log('Conexão estabelecida.');
+        reconnectInterval = 2000; // Resetar o intervalo de tempo para a próxima tentativa de reconexão (caso ocorra uma desconexão posterior)
+    };
+
+    ws.addEventListener('message', function (event) {
+        const json = JSON.parse(event.data);
+        //console.log('Dados atualizados:', json);
+        if(json.k !== undefined){
+            try {
+                //const json = JSON.parse(data);
+                const candle = json.k;
+            
+                const message = {
+                time: candle.t / 1000,
+                open: parseFloat(candle.o),
+                high: parseFloat(candle.h),
+                low: parseFloat(candle.l),
+                close: parseFloat(candle.c),
+                };
+            
+                preco_atual = parseFloat(candle.c);
+                
+                //cache.set("preco_atual", preco_atual);
+
+                cacheJson.preco_atual = preco_atual;
+                salvarCache(cacheJson);
+
+                //const valor = cache.get("preco_atual");
+                //console.log("valor:", valor);
+
+                //console.log(message);
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+    });
+
+    /*
+    ws.on('message', (data) => {
+        try {
+        const json = JSON.parse(data);
+        const candle = json.k;
+
+        const message = {
+            time: candle.t / 1000,
+            open: parseFloat(candle.o),
+            high: parseFloat(candle.h),
+            low: parseFloat(candle.l),
+            close: parseFloat(candle.c),
+        };
+
+        preco_atual = parseFloat(candle.c);
+
+        //console.log(message);
+        } catch (error) {
+        console.error(error);
+        }
+    });
+    */
+
+
+    ws.onerror = function(error) {
+        console.error('Erro na conexão do WebSocket: ' + error);
+    };
+
+    ws.onclose = function(event) {
+        console.log('Conexão fechada. Código: ' + event.code + ', motivo: ' + event.reason);
+        reconnect();
+    };
+}
+
+function reconnect() {
+  console.log('Tentando reconectar em ' + reconnectInterval + 'ms...');
+  setTimeout(connect, reconnectInterval);
+  reconnectInterval *= 2; // Dobrar o intervalo de tempo a cada tentativa de reconexão (exponencial)
+}
+
+connect(); // Iniciar a conexão WebSocket
+
+/*
+// Exemplo: Simular uma desconexão após 10 segundos
+setTimeout(function() {
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    ws.close();
+  }
+}, 10000);
+*/
+
+//setTimeout(restartApp, 6 * 60 * 60 * 1000);
+//setTimeout(restartApp, 1 * 60 * 1000);
+
+
+console.log('Iniciando aplicação...');
+
+/*
+// Define o tempo em minutos para reiniciar a aplicação
+const restartTime = 1;
+
+// Define o tempo em milissegundos para reiniciar a aplicação
+const restartTimeMs = restartTime * 60 * 1000;
+
+// Define a função para reiniciar a aplicação
+const restartApp = () => {
+
+    console.clear();
+    console.log('Reiniciando aplicação...');
+
+    //nodemon.restart();
+
+    cache.flushAll();
+    clearTimeout(restartTimer);
+
+    /*
+    const app = spawn(process.argv[0], process.argv.slice(1), {
+        detached: true,
+        stdio: 'ignore'
+    });
+    app.unref();
+    process.exit();
+
+    *
+
+};
+
+// Define o temporizador para reiniciar a aplicação
+const restartTimer = setTimeout(restartApp, restartTimeMs);
+*/
+// Cancela o temporizador quando a aplicação é encerrada
+//process.on('exit', () => {
+  //clearTimeout(restartTimer);
+//});
+
+//limparCache();
+cacheJson.objSendcalc = null;
+salvarCache(cacheJson);
+
+//const cryptSymbol = process.env.SYMBOL;
+//const cryptSymbol = process.env.SYMBOL;
+//const cryptSymbol = 'BTCUSDT';
+const cryptSymbol = 'ADAUSDT';
+
 
 async function data(request, response){ 
     //const dynamicDate = new Date();
