@@ -1,7 +1,8 @@
 import api from './api';
 import { stochasticrsi } from 'technicalindicators';
 import { sma } from 'technicalindicators';
-import { EMA } from 'technicalindicators';
+import { ema } from 'technicalindicators';
+import { atr } from 'technicalindicators';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, set, child, get } from "firebase/database";
 
@@ -19,6 +20,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 const dbRef = ref(database);
+
 
 
 let timestampArr1m = [];
@@ -102,6 +104,460 @@ let lowArr1w = [];
 let volArr1w = [];
 let marketData1w = null;
 
+var preco_anterior_1m = null;
+var preco_anterior2_1m = null;
+var abertura_atual_1m = null;
+var abertura_anterior_1m = null;
+var abertura_anterior2_1m = null;
+var max_atual_1m = null;
+var max_anterior_1m = null;
+var max_anterior2_1m = null;
+var min_atual_1m = null;
+var min_anterior_1m = null;
+var min_anterior2_1m = null;
+
+var preco_anterior_3m = null;
+var preco_anterior2_3m = null;
+var abertura_atual_3m = null;
+var abertura_anterior_3m = null;
+var abertura_anterior2_3m = null;
+var max_atual_3m = null;
+var max_anterior_3m = null;
+var max_anterior2_3m = null;
+var min_atual_3m = null;
+var min_anterior_3m = null;
+var min_anterior2_3m = null;
+
+var preco_anterior_5m = null;
+var preco_anterior2_5m = null;
+var abertura_atual_5m = null;
+var abertura_anterior_5m = null;
+var abertura_anterior2_5m = null;
+var max_atual_5m = null;
+var max_anterior_5m = null;
+var max_anterior2_5m = null;
+var min_atual_5m = null;
+var min_anterior_5m = null;
+var min_anterior2_5m = null;
+
+
+var preco_anterior_15m = null;
+var preco_anterior2_15m = null;
+var abertura_atual_15m = null;
+var abertura_anterior_15m = null;
+var abertura_anterior2_15m = null;
+var max_atual_15m = null;
+var max_anterior_15m = null;
+var max_anterior2_15m = null;
+var min_atual_15m = null;
+var min_anterior_15m = null;
+var min_anterior2_15m = null;
+
+var preco_anterior_30m = null;
+var preco_anterior2_30m = null;
+var abertura_atual_30m = null;
+var abertura_anterior_30m = null;
+var abertura_anterior2_30m = null;
+var max_atual_30m = null;
+var max_anterior_30m = null;
+var max_anterior2_30m = null;
+var min_atual_30m = null;
+var min_anterior_30m = null;
+var min_anterior2_30m = null;
+
+var preco_anterior_1d = null;
+var preco_anterior2_1d = null;
+var abertura_atual_1d = null;
+var abertura_anterior_1d = null;
+var abertura_anterior2_1d = null;
+var max_atual_1d = null;
+var max_anterior_1d = null;
+var max_anterior2_1d = null;
+var min_atual_1d = null;
+var min_anterior_1d = null;
+var min_anterior2_1d = null;
+
+var zigzag = null;
+
+// SMA List
+
+var sma10p1m = null;
+var sma20p1m = null;
+var sma50p1m = null;
+var sma100p1m = null;
+var sma200p1m = null;
+
+var sma10p3m = null;
+var sma20p3m = null;
+var sma50p3m = null;
+var sma100p3m = null;
+var sma200p3m = null;
+
+var sma10p5m = null;
+var sma20p5m = null;
+var sma50p5m = null;
+var sma100p5m = null;
+var sma200p5m = null;
+
+var sma10p15m = null;
+var sma20p15m = null;
+var sma50p15m = null;
+var sma100p15m = null;
+var sma200p15m = null;
+
+var sma10p30m = null;
+var sma20p30m = null;
+var sma50p30m = null;
+var sma100p30m = null;
+var sma200p30m = null;
+
+var sma5p1h = null;
+var sma20p1h = null;
+var sma50p1h = null;
+var sma100p1h = null;
+var sma200p1h = null;
+
+var sma10p4h = null;
+var sma20p4h = null;
+var sma50p4h = null;
+var sma100p4h = null;
+var sma200p4h = null;
+
+
+var sma10p1mprev = null;
+var sma20p1mprev = null;
+var sma50p1mprev = null;
+var sma100p1mprev = null;
+var sma200p1mprev = null;
+
+var sma10p3mprev = null;
+var sma20p3mprev = null;
+var sma50p3mprev = null;
+var sma100p3mprev = null;
+var sma200p3mprev = null;
+
+var sma10p5mprev = null;
+var sma20p5mprev = null;
+var sma50p5mprev = null;
+var sma100p5mprev = null;
+var sma200p5mprev = null;
+
+var sma10p15mprev = null;
+var sma20p15mprev = null;
+var sma50p15mprev = null;
+var sma100p15mprev = null;
+var sma200p15mprev = null;
+
+var sma10p30mprev = null;
+var sma20p30mprev = null;
+var sma50p30mprev = null;
+var sma100p30mprev = null;
+var sma200p30mprev = null;
+
+var sma10p1hprev = null;
+var sma20p1hprev = null;
+var sma50p1hprev = null;
+var sma100p1hprev = null;
+var sma200p1hprev = null;
+
+var sma10p4hprev = null;
+var sma20p4hprev = null;
+var sma50p4hprev = null;
+var sma100p4hprev = null;
+var sma200p4hprev = null;
+
+//SMA Prox
+
+var sma1m10p = null;
+var sma1m20p = null;
+var sma1m50p = null;
+var sma1m100p = null;
+var sma1m200p = null;
+
+var sma3m10p = null;
+var sma3m20p = null;
+var sma3m50p = null;
+var sma3m100p = null;
+var sma3m200p = null;
+
+var sma5m10p = null;
+var sma5m20p = null;
+var sma5m50p = null;
+var sma5m100p = null;
+var sma5m200p = null;
+
+var sma15m10p = null;
+var sma15m20p = null;
+var sma15m50p = null;
+var sma15m100p = null;
+var sma15m200p = null;
+
+var sma30m10p = null;
+var sma30m20p = null;
+var sma30m50p = null;
+var sma30m100p = null;
+var sma30m200p = null;
+
+var sma1h5p = null;
+var sma1h20p = null;
+var sma1h50p = null;
+var sma1h100p = null;
+var sma1h200p = null;
+
+var sma4h10p = null;
+var sma4h20p = null;
+var sma4h50p = null;
+var sma4h100p = null;
+var sma4h200p = null;
+
+var sma1m10prev = null;
+var sma1m20prev = null;
+var sma1m50prev = null;
+var sma1m100prev = null;
+var sma1m200prev = null;
+
+var sma3m10prev = null;
+var sma3m20prev = null;
+var sma3m50prev = null;
+var sma3m100prev = null;
+var sma3m200prev = null;
+
+var sma5m10prev = null;
+var sma5m20prev = null;
+var sma5m50prev = null;
+var sma5m100prev = null;
+var sma5m200prev = null;
+
+var sma15m10prev = null;
+var sma15m20prev = null;
+var sma15m50prev = null;
+var sma15m100prev = null;
+var sma15m200prev = null;
+
+var sma30m10prev = null;
+var sma30m20prev = null;
+var sma30m50prev = null;
+var sma30m100prev = null;
+var sma30m200prev = null;
+
+var sma1h10prev = null;
+var sma1h20prev = null;
+var sma1h50prev = null;
+var sma1h100prev = null;
+var sma1h200prev = null;
+
+var sma4h10prev = null;
+var sma4h20prev = null;
+var sma4h50prev = null;
+var sma4h100prev = null;
+var sma4h200prev = null;
+
+//EMA List
+
+
+var ema10p1m = null;
+var ema20p1m = null;
+var ema50p1m = null;
+var ema100p1m = null;
+var ema200p1m = null;
+
+var ema10p3m = null;
+var ema20p3m = null;
+var ema50p3m = null;
+var ema100p3m = null;
+var ema200p3m = null;
+
+var ema10p5m = null;
+var ema20p5m = null;
+var ema50p5m = null;
+var ema100p5m = null;
+var ema200p5m = null;
+
+var ema10p15m = null;
+var ema20p15m = null;
+var ema50p15m = null;
+var ema100p15m = null;
+var ema200p15m = null;
+
+var ema10p30m = null;
+var ema20p30m = null;
+var ema50p30m = null;
+var ema100p30m = null;
+var ema200p30m = null;
+
+var ema5p1h = null;
+var ema20p1h = null;
+var ema50p1h = null;
+var ema100p1h = null;
+var ema200p1h = null;
+
+var ema10p4h = null;
+var ema20p4h = null;
+var ema50p4h = null;
+var ema100p4h = null;
+var ema200p4h = null;
+
+
+var ema10p1mprev = null;
+var ema20p1mprev = null;
+var ema50p1mprev = null;
+var ema100p1mprev = null;
+var ema200p1mprev = null;
+
+var ema10p3mprev = null;
+var ema20p3mprev = null;
+var ema50p3mprev = null;
+var ema100p3mprev = null;
+var ema200p3mprev = null;
+
+var ema10p5mprev = null;
+var ema20p5mprev = null;
+var ema50p5mprev = null;
+var ema100p5mprev = null;
+var ema200p5mprev = null;
+
+var ema10p15mprev = null;
+var ema20p15mprev = null;
+var ema50p15mprev = null;
+var ema100p15mprev = null;
+var ema200p15mprev = null;
+
+var ema10p30mprev = null;
+var ema20p30mprev = null;
+var ema50p30mprev = null;
+var ema100p30mprev = null;
+var ema200p30mprev = null;
+
+var ema10p1hprev = null;
+var ema20p1hprev = null;
+var ema50p1hprev = null;
+var ema100p1hprev = null;
+var ema200p1hprev = null;
+
+var ema10p4hprev = null;
+var ema20p4hprev = null;
+var ema50p4hprev = null;
+var ema100p4hprev = null;
+var ema200p4hprev = null;
+
+//EMA Prox
+
+var ema1m10p = null;
+var ema1m20p = null;
+var ema1m50p = null;
+var ema1m100p = null;
+var ema1m200p = null;
+
+var ema3m10p = null;
+var ema3m20p = null;
+var ema3m50p = null;
+var ema3m100p = null;
+var ema3m200p = null;
+
+var ema5m10p = null;
+var ema5m20p = null;
+var ema5m50p = null;
+var ema5m100p = null;
+var ema5m200p = null;
+
+var ema15m10p = null;
+var ema15m20p = null;
+var ema15m50p = null;
+var ema15m100p = null;
+var ema15m200p = null;
+
+var ema30m10p = null;
+var ema30m20p = null;
+var ema30m50p = null;
+var ema30m100p = null;
+var ema30m200p = null;
+
+var ema1h5p = null;
+var ema1h20p = null;
+var ema1h50p = null;
+var ema1h100p = null;
+var ema1h200p = null;
+
+var ema4h10p = null;
+var ema4h20p = null;
+var ema4h50p = null;
+var ema4h100p = null;
+var ema4h200p = null;
+
+var ema1m10prev = null;
+var ema1m20prev = null;
+var ema1m50prev = null;
+var ema1m100prev = null;
+var ema1m200prev = null;
+
+var ema3m10prev = null;
+var ema3m20prev = null;
+var ema3m50prev = null;
+var ema3m100prev = null;
+var ema3m200prev = null;
+
+var ema5m10prev = null;
+var ema5m20prev = null;
+var ema5m50prev = null;
+var ema5m100prev = null;
+var ema5m200prev = null;
+
+var ema15m10prev = null;
+var ema15m20prev = null;
+var ema15m50prev = null;
+var ema15m100prev = null;
+var ema15m200prev = null;
+
+var ema30m10prev = null;
+var ema30m20prev = null;
+var ema30m50prev = null;
+var ema30m100prev = null;
+var ema30m200prev = null;
+
+var ema1h10prev = null;
+var ema1h20prev = null;
+var ema1h50prev = null;
+var ema1h100prev = null;
+var ema1h200prev = null;
+
+var ema4h10prev = null;
+var ema4h20prev = null;
+var ema4h50prev = null;
+var ema4h100prev = null;
+var ema4h200prev = null;
+
+///
+
+var ltb4h = null;
+var lta4h = null;
+var ltb4h2 = null;
+var lta4h2 = null;
+
+var fibo0 = null;
+var fibo236 = null;
+var fibo382 = null;
+var fibo50 = null;
+var fibo618 = null;
+var fibo786 = null;
+var fibo1 = null;
+var fibo1618 = null;
+var fibo2618 = null;
+var fibo3618 = null;
+var fibo4236 = null;
+var fibo_d1618 = null;
+var fibo_d2618 = null;
+var fibo_d3618 = null;
+var fibo_d4236 = null;
+
+var open1d_0 = null;
+var open1d_1 = null;
+var close1d_1 = null;
+var close1d_2 = null;
+var max1d_1 = null;
+var max1d_2 = null;
+var min1d_1 = null;
+var min1d_2 = null;
+
 let openOrders = null;
 
 var lastUpdate = null;
@@ -113,8 +569,10 @@ var positions = null;
 var timestamp = null;
 
 var objSendcalc = {};
+var objMarket = {};
 
 var flag = "";
+var flagpos = [];
 
 var position = [];
 
@@ -123,8 +581,44 @@ var pnlHist = null;
 //var userTrades = null;
 
 //const cryptSymbol = process.env.SYMBOL;
-const cryptSymbol = 'BTCUSDT';
-//const cryptSymbol = 'ADAUSDT';
+//const cryptSymbol = process.env.SYMBOL;
+//const cryptSymbol = 'BTCUSDT';
+const cryptSymbol = 'ADAUSDT';
+
+
+
+const fs = require('fs');
+const path = require('path');
+const cacheFilePath = path.join(__dirname, 'cache.json');
+
+
+// Função para salvar o cache em um arquivo
+function salvarCache(cache) {
+    fs.writeFileSync(cacheFilePath, JSON.stringify(cache));
+}
+
+// Função para carregar o cache de um arquivo
+function carregarCache() {
+    try {
+        const data = fs.readFileSync(cacheFilePath, 'utf-8');
+        return JSON.parse(data);
+    } catch (error) {
+        return {};
+    }
+}
+
+function limparCache() {
+    try {
+        fs.unlinkSync(cacheFilePath);
+        console.log('Cache limpo com sucesso.');
+    } catch (error) {
+        console.error('Erro ao limpar o cache:', error);
+    }
+}
+
+
+
+var cacheJson = carregarCache();
 
 async function data(request, response){ 
     //const dynamicDate = new Date();
