@@ -5,12 +5,11 @@ import axios from 'axios';
 import queryString from 'querystring';
 import crypto from 'crypto';
 
-    const apiKey = process.env.API_KEY;
-    const apiSecret = process.env.SECRET_KEY;
-    const apiUrl = process.env.API_URL_SPOT;
-    const apiUrlFut = process.env.API_URL_FUT;
-
-    
+const apiKey = process.env.API_KEY;
+const apiSecret = process.env.SECRET_KEY;
+const apiUrl = process.env.API_URL_SPOT;
+const apiUrlFut = process.env.API_URL_FUT;
+   
 
 
 //const apiKey = process.env.API_KEY_TESTNET;
@@ -20,8 +19,8 @@ import crypto from 'crypto';
 
 
 //const symbol = process.env.SYMBOL;
-const symbol = 'BTCUSDT';
-//const symbol = 'ADAUSDT';
+//const symbol = 'BTCUSDT';
+const symbol = 'ADAUSDT';
  
 async function publicCall(path, data, method = 'GET', headers = {}) {
     try {
@@ -112,7 +111,7 @@ async function privateFutCall2(path, timestamp, data = {}, method = 'GET') {
     }
     //const type = "FUTURES";
     //const timestamp = (Date.now())-1000;
-    const recvWindow = 20000;//máximo permitido, default 5000
+    const recvWindow = 50000;//máximo permitido, default 5000
     
     const signature = crypto
         .createHmac('sha256', apiSecret)
@@ -138,7 +137,7 @@ async function time() {
     return publicCall('/api/v3/time');
 }
  
-async function depth(symbol = symbol, limit = 5) {
+async function depth(symbol = 'BTCBRL', limit = 5) {
     return publicCall('/api/v3/depth', { symbol, limit });
 }
 
@@ -167,7 +166,7 @@ async function accountFutures(timestamp){
 }
 
 async function klines(interval){
-    const limit = 100;
+    const limit = 401;
     //return publicCall('/api/v3/klines',{symbol, interval, limit});
     return publicFutCall('/fapi/v1/klines',{symbol, interval, limit});
 }
@@ -182,6 +181,12 @@ async function allOrders(timestamp){
     return privateFutCall('/fapi/v1/allOrders',timestamp);
 }
 
+async function cancelAllOrders(timestamp){
+
+    return privateFutCall2('/fapi/v1/allOpenOrders', timestamp, {symbol}, 'DELETE');
+}
+
+
 /*
 async function newOrder(timestamp, side, type = "TRAILING_STOP_MARKET", quantity = 0.003, callbackRate = 0.3){
 
@@ -189,61 +194,77 @@ async function newOrder(timestamp, side, type = "TRAILING_STOP_MARKET", quantity
 }
 */
 
-async function newOrderBuy(timestamp){
+
+async function newOrderBuy(timestamp, quantity){
     const side = "BUY";
     const type = "MARKET";
 
-    if(symbol == "BTCUSDT"){
-        quantity = 0.003;
-    }else if(symbol == "ADAUSDT"){
-        quantity = 90;
-    }
-
     return privateFutCall2('/fapi/v1/order',timestamp, {symbol, side, type, quantity}, "POST");
 }
 
-async function newOrderSell(timestamp){
+async function newOrderSell(timestamp, quantity){
     const side = "SELL";
     const type = "MARKET";
 
-    var quantity = 0.0;
-
-    if(symbol == "BTCUSDT"){
-        quantity = 0.003;
-    }else if(symbol == "ADAUSDT"){
-        quantity = 90;
-    }
-
     return privateFutCall2('/fapi/v1/order',timestamp, {symbol, side, type, quantity}, "POST");
 }
 
+async function newStopBuy(stop, timestamp){
 
-async function closePositionBuy(timestamp){
+    const side = "SELL";
+    const type = "STOP_MARKET";
+    const closePosition = "true";
+    const workingType = "MARK_PRICE";
+    const stopPrice = stop;
+
+    return privateFutCall2('/fapi/v1/order',timestamp, {symbol, side, type, closePosition, workingType, stopPrice}, "POST");
+}
+ 
+async function newStopSell(stop, timestamp){
+    const side = "BUY";
+    const type = "STOP_MARKET";
+    const closePosition = "true";
+    const workingType = "MARK_PRICE";
+    const stopPrice = stop;
+
+    return privateFutCall2('/fapi/v1/order',timestamp, {symbol, side, type, closePosition, workingType, stopPrice}, "POST");
+}
+
+async function newTakeBuy(stop, timestamp){
+
+    const side = "SELL";
+    const type = "TAKE_PROFIT_MARKET";
+    const closePosition = "true";
+    //const workingType = "MARK_PRICE";
+    const stopPrice = stop;
+
+    return privateFutCall2('/fapi/v1/order',timestamp, {symbol, side, type, closePosition, /*workingType,*/ stopPrice}, "POST");
+}
+ 
+async function newTakeSell(stop, timestamp){
+    const side = "BUY";
+    const type = "TAKE_PROFIT_MARKET";
+    const closePosition = "true";
+    //const workingType = "MARK_PRICE";
+    const stopPrice = stop;
+
+    return privateFutCall2('/fapi/v1/order',timestamp, {symbol, side, type, closePosition, /*workingType,*/ stopPrice}, "POST");
+}
+
+async function closePositionBuy(timestamp, quantity){
     const side = "SELL";
     const type = "MARKET";
     const reduceOnly = "true";
-    var quantity = 0.0;
-
-    if(symbol == "BTCUSDT"){
-        quantity = 0.1;
-    }else if(symbol == "ADAUSDT"){
-        quantity = 200;
-    }
+    quantity = parseFloat(quantity * 4);
 
     return privateFutCall2('/fapi/v1/order',timestamp, {symbol, side, type, quantity, reduceOnly}, "POST");
 }
 
-async function closePositionSell(timestamp){
+async function closePositionSell(timestamp, quantity){
     const side = "BUY";
     const type = "MARKET";
     const reduceOnly = "true";
-    var quantity = 0.0;
-
-    if(symbol == "BTCUSDT"){
-        quantity = 0.1;
-    }else if(symbol == "ADAUSDT"){
-        quantity = 200;
-    }
+    quantity = parseFloat(quantity * 4);
 
     return privateFutCall2('/fapi/v1/order',timestamp, {symbol, side, type, quantity, reduceOnly}, "POST");
 }
@@ -258,7 +279,7 @@ async function userTrades(timestamp){
     return privateFutCall('/fapi/v1/userTrades',timestamp, {symbol, limit});
 }
 
-module.exports = { time, depth, exchangeInfo, accountSnapshot, balance, accountFutures, klines, openOrders, allOrders, newOrderBuy, newOrderSell, closePositionSell, closePositionBuy, income, userTrades }
+module.exports = { time, depth, exchangeInfo, accountSnapshot, balance, accountFutures, klines, openOrders, allOrders, newOrderBuy, newOrderSell, cancelAllOrders, closePositionSell, closePositionBuy, income, userTrades, newStopBuy, newStopSell, newTakeBuy, newTakeSell }
 
 /*
 
