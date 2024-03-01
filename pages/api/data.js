@@ -1,4 +1,5 @@
 import api from './api';
+import CacheHandler from './cache-handler';
 import { stochasticrsi } from 'technicalindicators';
 import { sma } from 'technicalindicators';
 import { ema } from 'technicalindicators';
@@ -580,7 +581,7 @@ var pnlHist = null;
 //var userTradesObj = [];
 //var userTrades = null;
 
-
+/*
 const fs = require('fs');
 const path = require('path');
 const cacheFilePath = path.join(__dirname, 'cache.json');
@@ -611,6 +612,7 @@ function limparCache() {
 }
 
 var cacheJson = carregarCache();
+*/
 
 const WebSocket = require('ws');
 const { unzipSync } = require('zlib');
@@ -771,8 +773,9 @@ const restartTimer = setTimeout(restartApp, restartTimeMs);
 //});
 
 //limparCache();
-cacheJson.objSendcalc = null;
-salvarCache(cacheJson);
+
+//////cacheJson.objSendcalc = null;
+//////salvarCache(cacheJson);
 
 //const cryptSymbol = process.env.SYMBOL;
 //const cryptSymbol = process.env.SYMBOL;
@@ -788,6 +791,11 @@ async function data(request, response){
     cacheJson.objSendcalc = null;
     salvarCache(cacheJson);
     */
+
+    CacheHandler.set('testProp', "valor da chave");
+    var cache = CacheHandler.get('testProp');
+    console.log("cache", cache);
+    
     start_position: while (true) {
         
         response.json("test");
