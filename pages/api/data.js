@@ -844,7 +844,7 @@ async function data(request, response){
     //var number = 1;
     //start_position: while (true) {
         
-        response.json("Em teste");
+        response.json(preco_atual);
         //number =+ 1;
         //if (number < 100) continue start_position;
         //break;
