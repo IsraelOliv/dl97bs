@@ -816,4 +816,4 @@ async function data2(request, response){
     response.json(cache);
 
 }
-export default {data, data2 };
+export default data;
