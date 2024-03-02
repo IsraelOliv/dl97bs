@@ -7,12 +7,12 @@ export default class CacheHandler {
     console.log('initialized custom cache-handler')
   }
 
-  async get(key) {
+  async getcach(key) {
     console.log('cache-handler get', key)
     return cache.get(key)
   }
 
-  async set(key, data) {
+  async setcach(key, data) {
     console.log('cache-handler set', key)
     cache.set(key, {
       value: data,

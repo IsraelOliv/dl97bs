@@ -1,5 +1,5 @@
 import api from './api';
-import { CacheHandler, get, set } from './cache-handler';
+import { CacheHandler, getcach, setcach } from './cache-handler';
 import { stochasticrsi } from 'technicalindicators';
 import { sma } from 'technicalindicators';
 import { ema } from 'technicalindicators';
@@ -792,8 +792,8 @@ async function data(request, response){
     salvarCache(cacheJson);
     */
 
-    CacheHandler.set('testProp', "valor da chave");
-    var cache = CacheHandler.get('testProp');
+    CacheHandler.setcach('testProp', "valor da chave");
+    var cache = CacheHandler.getcach('testProp');
     console.log("cache", cache);
     
     start_position: while (true) {
