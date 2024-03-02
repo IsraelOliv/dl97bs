@@ -1,5 +1,5 @@
 import api from './api';
-import CacheHandler from './cache-handler';
+import { CacheHandler, get, set } from './cache-handler';
 import { stochasticrsi } from 'technicalindicators';
 import { sma } from 'technicalindicators';
 import { ema } from 'technicalindicators';
