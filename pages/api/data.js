@@ -614,6 +614,30 @@ function limparCache() {
 var cacheJson = carregarCache();
 */
 
+const cachehandler = require('./cache-handler');
+
+async function carregarCache() {
+    try {
+        //const data = fs.readFileSync(cacheFilePath, 'utf-8');
+
+        var cache =  await cachehandler.getcach('cacheJson');
+        return JSON.parse(cache.value);
+    } catch (error) {
+        return {};
+    }
+}
+
+async function salvarCache(cache) {
+  //fs.writeFileSync(cacheFilePath, JSON.stringify(cache));
+
+  cachehandler.setcach('cacheJson', cache);
+
+
+}
+
+var cacheJson = carregarCache();
+
+
 const WebSocket = require('ws');
 const { unzipSync } = require('zlib');
 const { stringify } = require('querystring');
@@ -784,7 +808,6 @@ const restartTimer = setTimeout(restartApp, restartTimeMs);
 //const cryptSymbol = 'BTCUSDT';
 const cryptSymbol = 'ADAUSDT';
 
-const cachehandler = require('./cache-handler');
 
 var cache = null;
 async function data(request, response){ 
@@ -795,14 +818,23 @@ async function data(request, response){
     cacheJson.objSendcalc = null;
     salvarCache(cacheJson);
     */
+   var testCache = {
+    time: 13122421,
+    utroC: "string de teste",
+    ultCN: 333333 
+   }
 
-    cachehandler.setcach('testProp', "valor da chave");
+    salvarCache(testCache);
+
+    //cachehandler.setcach('testProp', "valor da chave");
     //cache = cachehandler.getcach('testProp');
     //console.log("cachehandl", cache);
+    console.log("testCache", testCache);
+
     var number = 1;
     //start_position: while (true) {
         
-        response.json("test");
+        response.json("Em teste");
         //number =+ 1;
         //if (number < 100) continue start_position;
         //break;
