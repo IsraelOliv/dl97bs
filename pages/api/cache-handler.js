@@ -10,19 +10,19 @@ class CacheHandler {
     this.cache = {}
     console.log('initialized custom cache-handler')
   }
-
-  async getcach(key) {
+}
+  async function getcach(key) {
     console.log('cache-handler get', key)
     return cache.get(key)
   }
 
-  async setcach(key, data) {
+  async function setcach(key, data) {
     console.log('cache-handler set', key)
     cache.set(key, {
       value: data,
       lastModified: Date.now(),
     })
   }
-}
+
 
 module.exports = {CacheHandler, getcach, setcach};
