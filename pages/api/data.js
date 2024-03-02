@@ -792,8 +792,8 @@ async function data(request, response){
     salvarCache(cacheJson);
     */
 
-    CacheHandler.setcach('testProp', "valor da chave");
-    var cache = CacheHandler.getcach('testProp');
+    setcach('testProp', "valor da chave");
+    var cache = getcach('testProp');
     console.log("cache", cache);
     
     start_position: while (true) {
