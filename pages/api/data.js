@@ -663,7 +663,7 @@ let reconnectInterval = 2000; // Intervalo de tempo em milissegundos entre as te
 var preco_atual = 0.0;
 var flagLock = false;
 
-function connect() {
+async function connect() {
     console.log('Tentando conectar ao WebSocket...');
     ws = new WebSocket(url);
 
@@ -817,7 +817,7 @@ const cryptSymbol = 'ADAUSDT';
 var cache = null;
 async function data(request, response){ 
     
-    connect(); // Iniciar a conexão WebSocket
+    await connect(); // Iniciar a conexão WebSocket
 
     /*
     connect(); // Iniciar a conexão WebSocket
