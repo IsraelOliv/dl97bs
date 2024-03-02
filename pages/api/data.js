@@ -1,5 +1,5 @@
 import api from './api';
-import { CacheHandler, getcach, setcach } from './cache-handler';
+//import { CacheHandler, getcach, setcach } from './cache-handler';
 import { stochasticrsi } from 'technicalindicators';
 import { sma } from 'technicalindicators';
 import { ema } from 'technicalindicators';
@@ -782,6 +782,8 @@ const restartTimer = setTimeout(restartApp, restartTimeMs);
 //const cryptSymbol = 'BTCUSDT';
 const cryptSymbol = 'ADAUSDT';
 
+const cachehandler = require('./cache-handler');
+
 
 async function data(request, response){ 
     
@@ -792,8 +794,8 @@ async function data(request, response){
     salvarCache(cacheJson);
     */
 
-    setcach('testProp', "valor da chave");
-    var cache = getcach('testProp');
+    cachehandler.setcach('testProp', "valor da chave");
+    var cache = cachehandler.getcach('testProp');
     console.log("cache", cache);
     
     start_position: while (true) {
