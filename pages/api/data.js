@@ -616,16 +616,6 @@ var cacheJson = carregarCache();
 
 const cachehandler = require('./cache-handler');
 
-async function carregarCache() {
-    try {
-        //const data = fs.readFileSync(cacheFilePath, 'utf-8');
-
-        var cache =  await cachehandler.getcach('cacheJson');
-        return JSON.parse(cache.value);
-    } catch (error) {
-        return {};
-    }
-}
 
 async function salvarCache(cache) {
   //fs.writeFileSync(cacheFilePath, JSON.stringify(cache));
@@ -636,7 +626,22 @@ async function salvarCache(cache) {
 
 }
 
-//var cacheJson = carregarCache();
+async function carregarCache() {
+    try {
+        //const data = fs.readFileSync(cacheFilePath, 'utf-8');
+
+        var cachestub =  await cachehandler.getcach('cacheJson');
+        //return JSON.parse(cachestub);
+        //return cachestub['value'];
+        return cachestub.value;
+        //return JSON.parse(cachestub);
+        
+    } catch (error) {
+        return {};
+    }
+}
+
+var cacheJson = carregarCache();
 
 
 const WebSocket = require('ws');
@@ -691,8 +696,8 @@ function connect() {
                 //const valor = cache.get("preco_atual");
                 //console.log("valor:", valor);
 
-                //cacheJson.preco_atual = preco_atual;
-                //salvarCache(cacheJson);
+                cacheJson.preco_atual = preco_atual;
+                salvarCache(cacheJson);
 
 
                 //console.log(message);
@@ -819,20 +824,23 @@ async function data(request, response){
     cacheJson.objSendcalc = null;
     salvarCache(cacheJson);
     */
-   var testCache = {
+   /*
+    var testCache = {
     time: 13122421,
     utroC: "string de teste",
     ultCN: 333333 
    }
 
     salvarCache(testCache);
+    console.log("testCache", testCache);
+
+    */
 
     //cachehandler.setcach('testProp', "valor da chave");
     //cache = cachehandler.getcach('testProp');
     //console.log("cachehandl", cache);
-    console.log("testCache", testCache);
 
-    var number = 1;
+    //var number = 1;
     //start_position: while (true) {
         
         response.json("Em teste");

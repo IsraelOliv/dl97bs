@@ -18,7 +18,7 @@ async function carregarCache() {
     }
 }
 
-async function data2(request, response){ 
+async function datacache(request, response){ 
 
     var cacheJson = await carregarCache();
 
@@ -30,4 +30,4 @@ async function data2(request, response){
 
 }
 
-export default data2;
+export default datacache;
