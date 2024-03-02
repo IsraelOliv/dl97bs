@@ -749,7 +749,6 @@ function reconnect() {
   reconnectInterval *= 2; // Dobrar o intervalo de tempo a cada tentativa de reconexão (exponencial)
 }
 
-connect(); // Iniciar a conexão WebSocket
 
 /*
 // Exemplo: Simular uma desconexão após 10 segundos
@@ -818,6 +817,8 @@ const cryptSymbol = 'ADAUSDT';
 var cache = null;
 async function data(request, response){ 
     
+    connect(); // Iniciar a conexão WebSocket
+
     /*
     connect(); // Iniciar a conexão WebSocket
     cacheJson = carregarCache();
