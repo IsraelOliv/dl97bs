@@ -8,7 +8,7 @@ async function data2(request, response){
     cache = cachehandler.getcach('testProp');
     console.log("cachehandl", cache);
     
-    response.json(cache);
+    response.json(JSON.stringify(cache));
 
 }
 
