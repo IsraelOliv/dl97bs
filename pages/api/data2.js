@@ -1,4 +1,8 @@
 
+const cachehandler = require('./cache-handler');
+
+var cache = null;
+
 async function data2(request, response){ 
 
     cache = cachehandler.getcach('testProp');
