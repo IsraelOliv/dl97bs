@@ -630,8 +630,8 @@ async function carregarCache() {
 async function salvarCache(cache) {
   //fs.writeFileSync(cacheFilePath, JSON.stringify(cache));
 
-  //cachehandler.setcach('cacheJson', JSON.stringify(cache));
-  cachehandler.setcach('cacheJson', cache);
+  cachehandler.setcach('cacheJson', JSON.stringify(cache));
+  //cachehandler.setcach('cacheJson', cache);
 
 
 }

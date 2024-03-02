@@ -9,8 +9,8 @@ async function carregarCache() {
 
         cachestub =  await cachehandler.getcach('cacheJson');
         //return JSON.parse(cachestub);
-        //return cachestub['value'];
-        return JSON.parse(cachestub);
+        return cachestub['value'];
+        //return JSON.parse(cachestub);
         
     } catch (error) {
         return {};
