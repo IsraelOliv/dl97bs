@@ -700,7 +700,7 @@ function connect() {
                 salvarCache(cacheJson);
 
 
-                //console.log(message);
+                console.log(message);
 
             } catch (error) {
                 console.error(error);
