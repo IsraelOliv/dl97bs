@@ -662,11 +662,13 @@ function connect() {
                 
                 //cache.set("preco_atual", preco_atual);
 
-                cacheJson.preco_atual = preco_atual;
-                salvarCache(cacheJson);
 
                 //const valor = cache.get("preco_atual");
                 //console.log("valor:", valor);
+
+                //cacheJson.preco_atual = preco_atual;
+                //salvarCache(cacheJson);
+
 
                 //console.log(message);
 
@@ -808,12 +810,4 @@ async function data(request, response){
     //}
 }
 
-async function data2(request, response){ 
-
-    cache = cachehandler.getcach('testProp');
-    console.log("cachehandl", cache);
-    
-    response.json(cache);
-
-}
 export default data;
