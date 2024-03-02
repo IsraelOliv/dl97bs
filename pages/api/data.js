@@ -663,7 +663,7 @@ let reconnectInterval = 2000; // Intervalo de tempo em milissegundos entre as te
 var preco_atual = 0.0;
 var flagLock = false;
 
-async function connect() {
+function connect() {
     console.log('Tentando conectar ao WebSocket...');
     ws = new WebSocket(url);
 
@@ -690,6 +690,9 @@ async function connect() {
             
                 preco_atual = parseFloat(candle.c);
                 
+                cachehandler.setcach('preco_atual', preco_atual);
+
+
                 //cache.set("preco_atual", preco_atual);
 
 
@@ -700,7 +703,7 @@ async function connect() {
                 salvarCache(cacheJson);
 
 
-                console.log(message);
+                //console.log(message);
 
             } catch (error) {
                 console.error(error);
@@ -817,7 +820,11 @@ const cryptSymbol = 'ADAUSDT';
 var cache = null;
 async function data(request, response){ 
     
-    await connect(); // Iniciar a conexão WebSocket
+    //await connect(); // Iniciar a conexão WebSocket
+
+
+    preco_atual =  await cachehandler.getcach('preco_atual');
+
 
     /*
     connect(); // Iniciar a conexão WebSocket
