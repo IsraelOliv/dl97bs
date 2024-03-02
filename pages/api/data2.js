@@ -8,7 +8,9 @@ async function carregarCache() {
         //const data = fs.readFileSync(cacheFilePath, 'utf-8');
 
         cachestub =  await cachehandler.getcach('cacheJson');
-        return JSON.parse(cachestub);
+        //return JSON.parse(cachestub);
+        return cachestub;
+        
     } catch (error) {
         return {};
     }
