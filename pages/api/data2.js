@@ -1,14 +1,14 @@
 
 const cachehandler = require('./cache-handler');
 
-var cache = null;
+var cachestub = null;
 
 async function carregarCache() {
     try {
         //const data = fs.readFileSync(cacheFilePath, 'utf-8');
 
-        var cache =  await cachehandler.getcach('cacheJson');
-        return JSON.parse(cache.value);
+        cachestub =  await cachehandler.getcach('cacheJson');
+        return JSON.parse(cachestub);
     } catch (error) {
         return {};
     }
@@ -16,7 +16,7 @@ async function carregarCache() {
 
 async function data2(request, response){ 
 
-    var cacheJson = carregarCache();
+    var cacheJson = await carregarCache();
 
     //cache =  await cachehandler.getcach('testProp');
     //console.log("cachehandl", cache);
