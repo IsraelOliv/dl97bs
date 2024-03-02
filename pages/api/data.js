@@ -784,7 +784,7 @@ const cryptSymbol = 'ADAUSDT';
 
 const cachehandler = require('./cache-handler');
 
-
+var cache = null;
 async function data(request, response){ 
     
     /*
@@ -795,8 +795,8 @@ async function data(request, response){
     */
 
     cachehandler.setcach('testProp', "valor da chave");
-    var cache = cachehandler.getcach('testProp');
-    console.log("cachehandl", cache);
+    //cache = cachehandler.getcach('testProp');
+    //console.log("cachehandl", cache);
     var number = 1;
     //start_position: while (true) {
         
@@ -808,4 +808,12 @@ async function data(request, response){
     //}
 }
 
-export default data;
+async function data2(request, response){ 
+
+    cache = cachehandler.getcach('testProp');
+    console.log("cachehandl", cache);
+    
+    response.json(cache);
+
+}
+export default {data, data2 };
