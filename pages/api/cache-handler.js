@@ -1,6 +1,10 @@
+import axios from 'axios';
+import queryString from 'querystring';
+
+
 const cache = new Map()
 
-module.exports = class CacheHandler {
+class CacheHandler {
   constructor(options) {
     this.options = options
     this.cache = {}
@@ -20,3 +24,5 @@ module.exports = class CacheHandler {
     })
   }
 }
+
+module.exports = {CacheHandler, getcach, setcach};
